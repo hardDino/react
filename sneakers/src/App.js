@@ -27,7 +27,8 @@ function App() {
                 title={obj.title}
                 price={obj.price} 
                 imageUrl={obj.imageUrl}
-                onClick={() => console.log(obj)}
+                addToFavorite={() => console.log("Click on favorite button")}
+                addToCart={() => console.log("Click on plus button")}
               />
             ))
           }
