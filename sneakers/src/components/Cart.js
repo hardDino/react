@@ -1,29 +1,29 @@
-function Cart() {
+function Cart({ onClickClose, items = [] }) {
 	return (
-		<div style={{ display: 'none' }} className='overlay'>
+		<div className='overlay'>
 			<div className='drawer p-30'>
-				<h2>Cart</h2>
+				<div className='d-flex justify-between align-center mb-30'>
+					<h2>Cart</h2>
+					<img
+						src='/img/delete.svg'
+						alt='Delete'
+						className='deleteBtn cu-p'
+						onClick={onClickClose}
+					/>
+				</div>
 				<div className='cartItems'>
-					<div className='cartItem d-flex justify-between align-center mb-20'>
-						<img width={70} height={70} src='/img/sneakers/1.jpg' alt='' />
-						<div className='content'>
-							<p>Мужские Кроссовки Nike Air Max 270</p>
-							<b>12999$</b>
+					{items.map((obj) => (
+						<div className='cartItem d-flex justify-between align-center mb-20'>
+							<img width={70} height={70} src={obj.imageUrl} alt='' />
+							<div className='content'>
+								<p>{obj.title}</p>
+								<b>{obj.price} $</b>
+							</div>
+							<div>
+								<img src='/img/delete.svg' alt='Delete' className='deleteBtn' />
+							</div>
 						</div>
-						<div>
-							<img src='/img/delete.svg' alt='Delete' className='deleteBtn' />
-						</div>
-					</div>
-					<div className='cartItem d-flex justify-between align-center mb-20'>
-						<img width={70} height={70} src='/img/sneakers/1.jpg' alt='' />
-						<div className='content'>
-							<p>Мужские Кроссовки Nike Air Max 270</p>
-							<b>12999$</b>
-						</div>
-						<div>
-							<img src='/img/delete.svg' alt='Delete' className='deleteBtn' />
-						</div>
-					</div>
+					))}
 				</div>
 				<ul className='cartTotal'>
 					<li>
