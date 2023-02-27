@@ -22,8 +22,6 @@ function App() {
   const addToCart = (obj) => {
     setCartItems(prev => [ ...prev, obj ]);
   }
-  
-  console.log(cartItems);
 
 	return (
 		<div className='wrapper clear'>
