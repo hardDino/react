@@ -1,49 +1,107 @@
-import Card from './components/Card'
+import Home from './pages/Home'
+import Favorites from './pages/Favorites'
 import Header from './components/Header'
 import Cart from './components/Cart'
-import Search from './components/Search'
 import { useEffect, useState } from 'react'
+import axios from 'axios'
+import { Route, Routes } from 'react-router-dom'
 
 function App() {
 	const [items, setItems] = useState([])
 	const [cartItems, setCartItems] = useState([])
+	const [favoriteItems, setFavoriteItems] = useState([])
+	const [searchValue, setSearchValue] = useState('')
 	const [cartOpened, setCartOpened] = useState(false)
 
 	useEffect(() => {
-		fetch('https://63fbcb901ff79e1332947a6c.mockapi.io/items')
+		// fetch('https://63fbcb901ff79e1332947a6c.mockapi.io/items')
+		// 	.then((response) => {
+		// 		return response.json()
+		// 	})
+		// 	.then((json) => {
+		// 		setItems(json)
+		// 	})
+
+		axios
+			//.get('https://63fbcb901ff79e1332947a6c.mockapi.io/items')
+			.get('https://bwih7lqpds.api.quickmocker.com/items')
 			.then((response) => {
-				return response.json()
+				setItems(response.data)
 			})
-			.then((json) => {
-				setItems(json)
+		axios
+			.get('https://63fbcb901ff79e1332947a6c.mockapi.io/cart')
+			.then((response) => {
+				setCartItems(response.data)
+			})
+		axios
+			.get('https://63fbcb901ff79e1332947a6c.mockapi.io/favorites')
+			.then((response) => {
+				setFavoriteItems(response.data)
 			})
 	}, [])
 
-  const addToCart = (obj) => {
-    setCartItems(prev => [ ...prev, obj ]);
-  }
+	const onAddToCart = (obj) => {
+		axios.post('https://63fbcb901ff79e1332947a6c.mockapi.io/cart', obj)
+		setCartItems((prev) => [...prev, obj])
+	}
+
+	const onAddToFavorites = (obj) => {
+		axios.post('https://63fbcb901ff79e1332947a6c.mockapi.io/favorites', obj)
+		setFavoriteItems((prev) => [...prev, obj])
+	}
+
+	const onRemoveFromFavorites = (id) => {
+		axios.delete(`https://63fbcb901ff79e1332947a6c.mockapi.io/favorites/${id}`)
+		setFavoriteItems((prev) => prev.filter((item) => item.id !== id))
+	}
+
+	const onRemoveFromCart = (id) => {
+		axios.delete(`https://63fbcb901ff79e1332947a6c.mockapi.io/cart/${id}`)
+		setCartItems((prev) => prev.filter((item) => item.id !== id))
+	}
+
+	const onChangeSearchInput = (event) => {
+		setSearchValue(event.target.value)
+	}
 
 	return (
 		<div className='wrapper clear'>
-			{cartOpened && <Cart items={cartItems} onClickClose={() => setCartOpened(false)} />}
+			{cartOpened && (
+				<Cart
+					items={cartItems}
+					onClickClose={() => setCartOpened(false)}
+					onRemoveFromCart={onRemoveFromCart}
+				/>
+			)}
 			<Header onClickCart={() => setCartOpened(true)} />
-			<div className='content p-40'>
-				<div className='d-flex justify-between align-center mb-30'>
-					<h1>All sneakers</h1>
-					<Search />
-				</div>
-				<div className='d-flex flex-wrap'>
-					{items.map((item) => (
-						<Card
-							title={item.title}
-							price={item.price}
-							imageUrl={item.imageUrl}
-							clickOnFavorite={() => console.log('Click on favorite button')}
-							clickOnPlus={(obj) => addToCart(obj)}
+			<Routes>
+				<Route
+					path='/'
+					exact='true'
+					element={
+						<Home
+							onChangeSearchInput={onChangeSearchInput}
+							searchValue={searchValue}
+							setSearchValue={setSearchValue}
+							items={items}
+							onAddToCart={onAddToCart}
+							onAddToFavorites={onAddToFavorites}
+							onRemoveFromFavorites={onRemoveFromFavorites}
+							onRemoveFromCart={onRemoveFromCart}
 						/>
-					))}
-				</div>
-			</div>
+					}
+				></Route>
+				<Route
+					path='/favorites'
+					exact='true'
+					element={
+						<Favorites
+							items={favoriteItems}
+							onRemoveFromFavorites={onRemoveFromFavorites}
+						/>
+					}
+				></Route>
+			</Routes>
 		</div>
 	)
 }

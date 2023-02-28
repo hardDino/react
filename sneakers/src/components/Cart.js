@@ -1,4 +1,4 @@
-function Cart({ onClickClose, items = [] }) {
+function Cart({ onClickClose, items = [], onRemoveFromCart }) {
 	return (
 		<div className='overlay'>
 			<div className='drawer p-30'>
@@ -11,33 +11,55 @@ function Cart({ onClickClose, items = [] }) {
 						onClick={onClickClose}
 					/>
 				</div>
-				<div className='cartItems'>
+
+				{items.length === 0 && (
+					<center className='emptyCart'>
+						<img className='mb-20' src='/img/empty.png' alt='' />
+						<h2 className='mb-10'>Cart is empty</h2>
+						<p className='mb-40'>
+							Add at least one pair of sneakers to place an order.
+						</p>
+						<button className='orderBtn' onClick={onClickClose}>
+							Back to sneakers
+						</button>
+					</center>
+				)}
+				<div className='cartItems flex'>
 					{items.map((obj) => (
 						<div className='cartItem d-flex justify-between align-center mb-20'>
-							<img width={70} height={70} src={obj.imageUrl} alt='' />
+							<img width={70} height={70} src={obj.imageUrl} alt='Sneakers' />
 							<div className='content'>
 								<p>{obj.title}</p>
 								<b>{obj.price} $</b>
 							</div>
 							<div>
-								<img src='/img/delete.svg' alt='Delete' className='deleteBtn' />
+								<img
+									src='/img/delete.svg'
+									alt='Delete'
+									className='deleteBtn'
+									onClick={() => onRemoveFromCart(obj.id)}
+								/>
 							</div>
 						</div>
 					))}
 				</div>
-				<ul className='cartTotal'>
-					<li>
-						<span>Summary:</span>
-						<div></div>
-						<b>21 498 $</b>
-					</li>
-					<li>
-						<span>Tax. 5%:</span>
-						<div></div>
-						<b>1074 $</b>
-					</li>
-				</ul>
-				<button className='orderBtn'>Make an order</button>
+				{items.length > 0 && (
+					<div>
+						<ul className='cartTotal'>
+							<li>
+								<span>Summary:</span>
+								<div></div>
+								<b>21 498 $</b>
+							</li>
+							<li>
+								<span>Tax. 5%:</span>
+								<div></div>
+								<b>1074 $</b>
+							</li>
+						</ul>
+						<button className='orderBtn'>Make an order</button>
+					</div>
+				)}
 			</div>
 		</div>
 	)

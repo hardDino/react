@@ -9,12 +9,12 @@ body {
   background: #e7f6ff;
 }
 
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
 header {
   border-bottom: 1px solid #eaeaea;
-
-  h3, p {
-    margin: 0;
-  }
 }
 
 .wrapper {
@@ -25,13 +25,8 @@ header {
   margin: 50px auto;
 }
 
-.content {
-  h1 {
-    margin: 0 ;
-  }
-}
-
 .search-block {
+  position: relative;
   border: 1px solid #f3f3f3;
   border-radius: 10px;
 
@@ -46,6 +41,12 @@ header {
     &::placeholder {
       color: #c4c4c4;
     }
+  }
+
+  .deleteSearchBtn {
+    position: absolute;
+    top: 25%;
+    right: 15px;
   }
 }
 
@@ -69,12 +70,27 @@ header {
   background-color: #fff;
   box-shadow: -10px 4px 24px rgba(0, 0, 0, 0.1);
 
-  h2 {
-    margin: 0;
+  .emptyCart {
+    transform: translateY(50%);
+
+    h2 {
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 27px;
+      color: #000000;
+    }
+
+    p {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 24px;
+      color: #000000;
+      opacity: 0.4;
+    }
   }
   
   .cartItems {
-    flex: 1;
+    //flex: 1;
     overflow: auto;
   }
 
@@ -132,6 +148,7 @@ header {
     font-weight: 600;
     font-size: 16px;
     line-height: 19px;
+    width: 100%;
     color: #fff;
     cursor: pointer;
     background-color: #9dd558;
