@@ -7,7 +7,6 @@ function Home({
 	items,
 	onAddToCart,
 	onAddToFavorites,
-	onRemoveFromFavorites,
 	onRemoveFromCart
 }) {
 	return (
@@ -41,14 +40,10 @@ function Home({
 					.map((item, index) => (
 						<Card
 							key={index}
-							id={item.id}
-							title={item.title}
-							price={item.price}
-							imageUrl={item.imageUrl}
 							clickOnFavorite={(obj) => onAddToFavorites(obj)}
 							clickOnPlus={(obj) => onAddToCart(obj)}
 							clickOnChecked={(id) => onRemoveFromCart(id)}
-							clickOnFavorited={(id) => onRemoveFromFavorites(id)}
+							{...item}
 						/>
 					))}
 			</div>

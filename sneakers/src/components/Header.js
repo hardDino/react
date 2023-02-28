@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 function Header(props) {
 	return (
 		<header className='d-flex justify-between align-center p-40'>
-			<Link to='/' exact>
+			<Link to='/'>
 				<div className='d-flex align-center'>
 					<img
 						width={40}
@@ -53,7 +53,7 @@ function Header(props) {
 					<span>1205 $</span>
 				</li>
 				<li>
-					<Link to='/favorites' exact>
+					<Link to='/favorites'>
 						<svg
 							width='22'
 							height='19'
