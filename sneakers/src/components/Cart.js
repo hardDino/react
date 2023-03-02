@@ -1,4 +1,6 @@
-function Cart({ onClickClose, items = [], onRemoveFromCart }) {
+
+function Cart({ onClickClose, onClickDelete, items = [] }) {
+
 	return (
 		<div className='overlay'>
 			<div className='drawer p-30'>
@@ -25,19 +27,19 @@ function Cart({ onClickClose, items = [], onRemoveFromCart }) {
 					</center>
 				)}
 				<div className='cartItems flex'>
-					{items.map((obj) => (
-						<div className='cartItem d-flex justify-between align-center mb-20'>
-							<img width={70} height={70} src={obj.imageUrl} alt='Sneakers' />
+					{items.map((item) => (
+						<div key={item.id} className='cartItem d-flex justify-between align-center mb-20'>
+							<img width={70} height={70} src={item.imageUrl} alt='Sneakers' />
 							<div className='content'>
-								<p>{obj.title}</p>
-								<b>{obj.price} $</b>
+								<p>{item.title}</p>
+								<b>{item.price} $</b>
 							</div>
 							<div>
 								<img
 									src='/img/delete.svg'
 									alt='Delete'
 									className='deleteBtn'
-									onClick={() => onRemoveFromCart(obj.id)}
+									onClick={() => onClickDelete(item)}
 								/>
 							</div>
 						</div>

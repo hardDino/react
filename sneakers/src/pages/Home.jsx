@@ -1,14 +1,36 @@
 import Card from '../components/Card'
 
 function Home({
+	items,
+	cartItems,
+	favoriteItems,
 	onChangeSearchInput,
 	searchValue,
 	setSearchValue,
-	items,
 	onAddToCart,
 	onAddToFavorites,
-	onRemoveFromCart
+	isLoading,
 }) {
+	const renderItems = () => {
+		const filtredItems = items && items.filter((item) =>
+			item.title.toLowerCase().includes(searchValue.toLowerCase())
+		)
+
+		return (isLoading ? [...Array(8)] : filtredItems).map((item, index) => (
+			<Card
+				key={index}
+				clickOnFavorite={(obj) => onAddToFavorites(obj)}
+				clickOnPlus={(obj) => onAddToCart(obj)}
+				added={cartItems.some((obj) => Number(obj.id) === Number(item.id))}
+				favorited={favoriteItems.some(
+					(obj) => Number(obj.id) === Number(item.id)
+				)}
+				loading={isLoading}
+				{...item}
+			/>
+		))
+	}
+
 	return (
 		<div className='content p-40'>
 			<div className='d-flex justify-between align-center mb-30'>
@@ -32,21 +54,7 @@ function Home({
 					)}
 				</div>
 			</div>
-			<div className='d-flex flex-wrap'>
-				{items
-					.filter((item) =>
-						item.title.toLowerCase().includes(searchValue.toLowerCase())
-					)
-					.map((item, index) => (
-						<Card
-							key={index}
-							clickOnFavorite={(obj) => onAddToFavorites(obj)}
-							clickOnPlus={(obj) => onAddToCart(obj)}
-							clickOnChecked={(id) => onRemoveFromCart(id)}
-							{...item}
-						/>
-					))}
-			</div>
+			<div className='d-flex flex-wrap'>{renderItems()}</div>
 		</div>
 	)
 }
