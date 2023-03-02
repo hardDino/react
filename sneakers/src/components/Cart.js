@@ -1,5 +1,43 @@
+import axios from 'axios'
+import React from 'react'
 
-function Cart({ onClickClose, onClickDelete, items = [] }) {
+import AppContext from '../context'
+
+import Info from './Info'
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+function Cart({ onClickDelete, items = [] }) {
+	const { cartItems, setCartOpened, setCartItems } =
+		React.useContext(AppContext)
+	const [isOrderComplete, setIsOrderComplete] = React.useState(false)
+	const [orderId, setOrderId] = React.useState(null)
+	const [isLoading, setIsLoading] = React.useState(false)
+
+	const onClickOrder = async () => {
+		try {
+			setIsLoading(true)
+			await axios.post(
+				'http://localhost:3001/orders',
+				cartItems
+			)
+			const { data } = await axios.get(
+				'http://localhost:3001/orders')
+			setOrderId(data.length)
+			setIsOrderComplete(true)
+			setCartItems([])
+
+			for (let i = 0; i < cartItems.length; i++) {
+				const item = cartItems[i]
+				await axios.delete('http://localhost:3001/cart/' + item.id)
+				await delay(1000)
+			}
+		} catch (error) {
+			alert('Error')
+			console.log(error)
+		}
+		setIsLoading(false)
+	}
 
 	return (
 		<div className='overlay'>
@@ -10,25 +48,28 @@ function Cart({ onClickClose, onClickDelete, items = [] }) {
 						src='/img/delete.svg'
 						alt='Delete'
 						className='deleteBtn cu-p'
-						onClick={onClickClose}
+						onClick={() => setCartOpened(false)}
 					/>
 				</div>
 
 				{items.length === 0 && (
-					<center className='emptyCart'>
-						<img className='mb-20' src='/img/empty.png' alt='' />
-						<h2 className='mb-10'>Cart is empty</h2>
-						<p className='mb-40'>
-							Add at least one pair of sneakers to place an order.
-						</p>
-						<button className='orderBtn' onClick={onClickClose}>
-							Back to sneakers
-						</button>
-					</center>
+					<Info
+						title={isOrderComplete ? 'Заказ оформлен!' : 'Корзина пустая'}
+						description={
+							isOrderComplete
+								? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
+								: 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'
+						}
+						image={isOrderComplete ? '/img/order.png' : '/img/empty.png'}
+						alt={isOrderComplete ? 'Order is complete' : 'Empty cart'}
+					/>
 				)}
 				<div className='cartItems flex'>
 					{items.map((item) => (
-						<div key={item.id} className='cartItem d-flex justify-between align-center mb-20'>
+						<div
+							key={item.id}
+							className='cartItem d-flex justify-between align-center mb-20'
+						>
 							<img width={70} height={70} src={item.imageUrl} alt='Sneakers' />
 							<div className='content'>
 								<p>{item.title}</p>
@@ -59,7 +100,13 @@ function Cart({ onClickClose, onClickDelete, items = [] }) {
 								<b>1074 $</b>
 							</li>
 						</ul>
-						<button className='orderBtn'>Make an order</button>
+						<button
+							disabled={isLoading}
+							onClick={onClickOrder}
+							className='orderBtn'
+						>
+							Make an order
+						</button>
 					</div>
 				)}
 			</div>
