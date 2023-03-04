@@ -1,5 +1,6 @@
 import Home from './pages/Home'
 import Favorites from './pages/Favorites'
+import { Orders } from './pages/Orders'
 import Header from './components/Header'
 import Cart from './components/Cart'
 import React from 'react'
@@ -89,8 +90,6 @@ function App() {
 		return favoriteItems.some((obj) => Number(obj.id) === Number(id))
 	}
 
-	const totalPrice = cartItems.reduce((acc, item) => acc += item.price, 0)
-
 	return (
 		<AppContext.Provider
 			value={{
@@ -102,8 +101,7 @@ function App() {
 				isItemAdded,
 				isItemFavorite,
 				setCartOpened,
-				setCartItems,
-				totalPrice
+				setCartItems
 			}}
 		>
 			<div className='wrapper clear'>
@@ -124,6 +122,7 @@ function App() {
 						}
 					></Route>
 					<Route path='/favorites' element={<Favorites />}></Route>
+					<Route path='/orders' element={<Orders />}></Route>
 				</Routes>
 			</div>
 		</AppContext.Provider>

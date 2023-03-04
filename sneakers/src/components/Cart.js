@@ -3,14 +3,16 @@ import React from 'react'
 
 import AppContext from '../context'
 
+import { useCart } from "../hooks/useCart";
 import Info from './Info'
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function Cart({ onClickDelete, items = [] }) {
-	const { cartItems, setCartOpened, setCartItems, totalPrice } =
+	const { setCartOpened } =
 		React.useContext(AppContext)
-	const [isOrderComplete, setIsOrderComplete] = React.useState(false)
+	const { cartItems, setCartItems, totalPrice } = useCart()
+ 	const [isOrderComplete, setIsOrderComplete] = React.useState(false)
 	const [orderId, setOrderId] = React.useState(null)
 	const [isLoading, setIsLoading] = React.useState(false)
 

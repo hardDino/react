@@ -5,15 +5,9 @@ import AppContext from '../../context'
 import ContentLoader from 'react-content-loader'
 import styles from './Card.module.scss'
 
-
-function Card({
-	id,
-	title,
-	imageUrl,
-	price,
-	loading = false,
-}) {
-	const { isItemAdded, isItemFavorite, onAddToCart, onAddToFavorites } = React.useContext(AppContext)
+function Card({ id, title, imageUrl, price, loading = false }) {
+	const { isItemAdded, isItemFavorite, onAddToCart, onAddToFavorites } =
+		React.useContext(AppContext)
 
 	const itemProps = { id, title, imageUrl, price }
 
@@ -53,7 +47,9 @@ function Card({
 						<img
 							className={styles.plus}
 							onClick={() => onAddToCart(itemProps)}
-							src={isItemAdded(id) ? '/img/btn-checked.svg' : '/img/btn-plus.svg'}
+							src={
+								isItemAdded(id) ? '/img/btn-checked.svg' : '/img/btn-plus.svg'
+							}
 							alt='Plus'
 						/>
 					</div>
