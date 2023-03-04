@@ -14,7 +14,6 @@ function App() {
 	const [searchValue, setSearchValue] = React.useState('')
 	const [cartOpened, setCartOpened] = React.useState(false)
 	const [isLoading, setIsLoading] = React.useState(true)
-	
 
 	React.useEffect(() => {
 		// fetch('https://63fbcb901ff79e1332947a6c.mockapi.io/items')
@@ -90,6 +89,8 @@ function App() {
 		return favoriteItems.some((obj) => Number(obj.id) === Number(id))
 	}
 
+	const totalPrice = cartItems.reduce((acc, item) => acc += item.price, 0)
+
 	return (
 		<AppContext.Provider
 			value={{
@@ -101,15 +102,13 @@ function App() {
 				isItemAdded,
 				isItemFavorite,
 				setCartOpened,
-				setCartItems
+				setCartItems,
+				totalPrice
 			}}
 		>
 			<div className='wrapper clear'>
 				{cartOpened && (
-					<Cart
-						items={cartItems}
-						onClickDelete={(obj) => onAddToCart(obj)}
-					/>
+					<Cart items={cartItems} onClickDelete={(obj) => onAddToCart(obj)} />
 				)}
 				<Header onClickCart={() => setCartOpened(true)} />
 				<Routes>

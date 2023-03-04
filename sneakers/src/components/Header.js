@@ -1,6 +1,13 @@
+import React from 'react'
+
+import AppContext from '../context'
+
 import { Link } from 'react-router-dom'
 
+
 function Header(props) {
+	const { totalPrice } = React.useContext(AppContext)
+
 	return (
 		<header className='d-flex justify-between align-center p-40'>
 			<Link to='/'>
@@ -50,7 +57,7 @@ function Header(props) {
 							strokeLinejoin='round'
 						/>
 					</svg>
-					<span>1205 $</span>
+					<span>{totalPrice} $</span>
 				</li>
 				<li>
 					<Link to='/favorites'>

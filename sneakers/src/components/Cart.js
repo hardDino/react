@@ -8,7 +8,7 @@ import Info from './Info'
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function Cart({ onClickDelete, items = [] }) {
-	const { cartItems, setCartOpened, setCartItems } =
+	const { cartItems, setCartOpened, setCartItems, totalPrice } =
 		React.useContext(AppContext)
 	const [isOrderComplete, setIsOrderComplete] = React.useState(false)
 	const [orderId, setOrderId] = React.useState(null)
@@ -17,12 +17,8 @@ function Cart({ onClickDelete, items = [] }) {
 	const onClickOrder = async () => {
 		try {
 			setIsLoading(true)
-			await axios.post(
-				'http://localhost:3001/orders',
-				cartItems
-			)
-			const { data } = await axios.get(
-				'http://localhost:3001/orders')
+			await axios.post('http://localhost:3001/orders', cartItems)
+			const { data } = await axios.get('http://localhost:3001/orders')
 			setOrderId(data.length)
 			setIsOrderComplete(true)
 			setCartItems([])
@@ -92,12 +88,12 @@ function Cart({ onClickDelete, items = [] }) {
 							<li>
 								<span>Summary:</span>
 								<div></div>
-								<b>21 498 $</b>
+								<b>{totalPrice} $</b>
 							</li>
 							<li>
 								<span>Tax. 5%:</span>
 								<div></div>
-								<b>1074 $</b>
+								<b>{Math.round(totalPrice*5/100)} $</b>
 							</li>
 						</ul>
 						<button
